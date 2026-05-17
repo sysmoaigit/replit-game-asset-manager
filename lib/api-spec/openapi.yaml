@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: selim-chat
+    description: Selim AI friendship chat
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /selim-chat:
+    post:
+      operationId: selimChat
+      tags: [selim-chat]
+      summary: Selim AI chat
+      description: |
+        Sends a compressed context summary (no raw memories) and player message
+        to the LLM backend. Only sends data when LLM_PROVIDER/LLM_API_KEY/LLM_MODEL
+        env vars are configured; otherwise returns useFallback=true so the client
+        falls back to the local offline brain. The server constructs all LLM
+        prompts server-side from trusted code; client-supplied prompt strings are
+        ignored.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SelimChatRequest"
+      responses:
+        "200":
+          description: Selim AI response or fallback indicator
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SelimChatResponse"
+        "400":
+          description: Bad request
+        "429":
+          description: Rate limit exceeded
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    SelimChatRequest:
+      type: object
+      required:
+        - playerMessage
+        - contextSummary
+      properties:
+        playerMessage:
+          type: string
+          maxLength: 500
+          description: Raw player message (safety-checked before use)
+        classification:
+          type: string
+          maxLength: 64
+          description: Message classification label from client-side classifier
+        contextSummary:
+          type: string
+          maxLength: 900
+          description: Compressed context summary — no raw memories included
+    SelimChatResponse:
+      type: object
+      properties:
+        reply:
+          type: string
+        moodAfter:
+          type: string
+        statEffects:
+          type: object
+          additionalProperties:
+            type: number
+        followUpPrompt:
+          type: string
+          nullable: true
+        isAskingPlayer:
+          type: boolean
+        suggestedVoiceTrigger:
+          type: string
+        useFallback:
+          type: boolean
+          description: If true, client should use local offline brain instead

@@ -1,0 +1,122 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "B_3mMUE5H-z7lFM0ZNNqm"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim/character-selim-portrait.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "TiRoLg61a9vwqXc1MrBK5"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim/character-pinky-portrait.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "DSdlJLEBx8NBB-H56EHno"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim/character-tisha-portrait.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "E45YOwaIDR9zpIRz7N3tG"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim/character-nila-portrait.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "vkQZ92rsqlsrkY5uNCO_Z"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-life/selim-pinky-phone-call.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "KDdvycimUJ7R5QcBHPqxQ"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-life/selim-dhaka-traffic.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "QCeoH_q9-Cqz9cKpAnifv"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-life/selim-mess-room.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "_K3PPN8_3DJwgSGQRWqEk"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-life/selim-job-interview.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "yy1Rvja3qfRk__KjYsoml"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-life/selim-friends-laughing.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "oTswbLulYvxUrtjI_Qa1l"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-life/selim-recovery-walk.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "22xW71iVoGpJm-I5zZTNb"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-life/selim-chaiwala-rooftop-date.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "mku0-bwcsKEBfoU_dNMZD"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim/character-ritu-portrait.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "7Xsc9e0HJNvK1h7iB7Mx7"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/02-sadia.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "Xqy4C6TcEpdrEIntCkUHA"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/03-tania.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "IhAYaku6pZsCEfkCInBYW"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/04-sumaiya.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "0_m3REUOZAJAJdkN-sy_f"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/06-farzana.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "l0I3unVWkPMVoEhDPII5s"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/07-jannat.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "6GlKE5azooCSsUSR1SJuI"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/08-mitu.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "uwFeFZvUyiP64BJOJxrgt"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/09-tabin.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "7WxuioWIb9m5cvwBLVxCT"
+uri = "file://artifacts/selim-in-dhaka/public/assets/selim-romance/10-asha.png"
+type = "image"
+title = "generated_image"

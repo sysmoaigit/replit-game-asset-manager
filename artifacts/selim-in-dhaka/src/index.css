@@ -1,0 +1,430 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Tiro+Bangla&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+/* ── App shell: phone-frame on desktop, edge-to-edge on mobile ──────────────
+   On phones the app fills the screen exactly as before. On tablets and
+   desktops we paint a dark themed backdrop and float a centered 430px
+   "phone" column with a soft border + drop shadow so the mobile-first
+   game doesn't feel like a lonely strip in a black void. */
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #000;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  /* Honor iPhone notch + Android gesture-bar safe areas at the shell level
+     so the dark backdrop paints into them instead of leaving white bands. */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+.app-frame {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  background: #0a0604;
+  overflow: hidden;
+}
+
+/* When installed as a PWA / native shell, the safe-area padding above adds
+   extra height to .app-shell. Subtract it from .app-frame so the inner
+   surface still fits the actual viewport without scrollbars. */
+@supports (padding: max(0px)) {
+  .app-frame {
+    min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+}
+@media (min-width: 600px) {
+  .app-shell {
+    background:
+      radial-gradient(ellipse at top, rgba(255, 107, 0, 0.08), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(255, 143, 0, 0.05), transparent 60%),
+      #0a0604;
+    padding: 24px 16px;
+  }
+  .app-frame {
+    /* Cap the desktop phone-frame to a real-phone aspect ratio (~9:19.5) so the
+       home screen fits in one viewport instead of stretching tall. */
+    min-height: 0;
+    height: min(880px, calc(100dvh - 48px));
+    max-height: calc(100dvh - 48px);
+    border-radius: 36px;
+    border: 1px solid rgba(255, 107, 0, 0.22);
+    box-shadow:
+      0 30px 80px -20px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+      0 0 60px -20px rgba(255, 107, 0, 0.15);
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Promote to containing block so child `position: fixed` modals
+       (Album, Journey, Settings, etc.) are scoped to the phone frame
+       instead of escaping into the desktop backdrop. `transform` is the
+       most universally-supported trigger for this. */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}
+
+/* ── Hide scrollbars globally for a native-app feel ────────────────────────
+   Top-tier mobile apps never show scrollbars — content scrolls smoothly with
+   no visible chrome. We hide them on every scrollable surface inside the
+   phone frame (the frame itself plus inner panels like Album, Journey,
+   Settings, GameScreen) while keeping scroll behavior intact. */
+.app-frame,
+.app-frame *,
+html,
+body {
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE / old Edge */
+}
+.app-frame::-webkit-scrollbar,
+.app-frame *::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none;                  /* Chrome / Safari / Edge */
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+
+  --opaque-button-border-intensity: -8;
+
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .08);
+
+  --background: 30 60% 8%; /* Warm dark amber/brown */
+  --foreground: 35 40% 95%; /* Cream */
+
+  --border: 30 40% 20%;
+  --input: 30 40% 20%;
+  --ring: 28 95% 55%;
+
+  --card: 35 40% 95%;
+  --card-foreground: 30 60% 8%;
+  --card-border: 35 30% 85%;
+
+  --sidebar: 35 40% 95%;
+  --sidebar-foreground: 30 60% 8%;
+  --sidebar-border: 35 30% 85%;
+  --sidebar-primary: 28 95% 55%;
+  --sidebar-primary-foreground: 35 40% 95%;
+  --sidebar-accent: 30 30% 90%;
+  --sidebar-accent-foreground: 30 60% 8%;
+  --sidebar-ring: 28 95% 55%;
+
+  --popover: 35 40% 95%;
+  --popover-foreground: 30 60% 8%;
+  --popover-border: 35 30% 85%;
+
+  --primary: 28 95% 55%; /* Bright saffron/orange */
+  --primary-foreground: 35 40% 95%;
+
+  --secondary: 30 40% 20%;
+  --secondary-foreground: 35 40% 95%;
+
+  --muted: 35 20% 85%;
+  --muted-foreground: 30 30% 40%;
+
+  --accent: 40 80% 50%;
+  --accent-foreground: 35 40% 95%;
+
+  --destructive: 0 80% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --chart-1: 28 95% 55%;
+  --chart-2: 200 80% 50%;
+  --chart-3: 120 80% 40%;
+  --chart-4: 280 70% 60%;
+  --chart-5: 340 80% 50%;
+
+  --app-font-sans: 'Hind Siliguri', sans-serif;
+  --app-font-serif: 'Tiro Bangla', Georgia, serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: 1rem;
+
+  /* Selim brand palette — Bogura sun + Dhaka dusk. */
+  --brand-saffron: #FF6B00;       /* Primary CTA, headers */
+  --brand-amber:   #FF8F00;       /* CTA gradient pair */
+  --brand-gold:    #FFD700;       /* Highlights, victory */
+  --brand-tea:     #FFB347;       /* Secondary text on dark */
+  --brand-pink:    #FF69B4;       /* Pinky / romantic */
+  --brand-pink-soft: #FF9ECF;     /* Hover / soft Pinky */
+  --brand-cream:   #FFF8EE;       /* Card body warm */
+  --brand-cream-2: #FFF3E0;       /* Card body warm gradient pair */
+  --brand-night:   #1a0f05;       /* Backdrop deep */
+  --brand-deep:    #2d1a08;       /* Backdrop mid */
+  --brand-shadow:  #0d0600;       /* Backdrop top */
+  --brand-rickshaw:#CC3300;       /* Accent red */
+  --brand-leaf:    #22c55e;       /* Positive */
+  --brand-warn:    #ef4444;       /* Negative */
+
+  /* ─── Scene mood tints ─── */
+  --mood-romantic:   236 72% 53%;
+  --mood-heartbreak: 219 64% 39%;
+  --mood-friendship: 32  90% 38%;
+  --mood-career:     45  93% 47%;
+  --mood-boss:       45  93% 47%;
+  --mood-silent:     220 30% 25%;
+  --mood-comedy:     30  100% 60%;
+  --mood-danger:     0   72% 51%;
+
+  /* ─── Elevation / shadow scale ─── */
+  --elev-sm: 0 1px 3px rgba(0,0,0,0.18);
+  --elev-md: 0 4px 12px rgba(0,0,0,0.32);
+  --elev-lg: 0 12px 32px rgba(0,0,0,0.45);
+  --glow-saffron: 0 0 18px rgba(255,107,0,0.45);
+  --glow-gold:    0 0 18px rgba(255,215,0,0.40);
+  --glow-pink:    0 0 18px rgba(255,105,180,0.40);
+}
+
+.dark {
+  --background: 30 60% 8%;
+  --foreground: 35 40% 95%;
+
+  --card: 35 40% 95%;
+  --card-foreground: 30 60% 8%;
+  --card-border: 35 30% 85%;
+
+  /* Retain exact theme */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html, body {
+    /* Prevent rubber-band scroll on iOS Safari + lock the document to the
+       viewport so the game UI behaves like a native app shell. */
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-foreground overflow-x-hidden;
+    /* Make text selection opt-in (long-press should not select chrome).
+       Game content can re-enable via .selectable utility if needed. */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    /* Anchor the document to the dynamic viewport so iOS URL bar collapse
+       doesn't cause layout shifts during gameplay. */
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+    /* iOS would otherwise zoom in on focus when input font-size < 16px. */
+    font-size: max(16px, 1rem);
+  }
+  button, [role="button"], a {
+    /* WCAG / Apple HIG: comfortable 44px touch targets across the app. */
+    touch-action: manipulation;
+  }
+  /* Opt-in text-selection escape hatch — apply to dialogue, diary entries,
+     share-card text, etc. so players can copy/translate when they want to. */
+  .selectable, .selectable * {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
+}
+
+/* Shared UI primitives — single source of truth for buttons, cards,
+   modals, toggles, and Bangla typography across the app. */
+@layer components {
+  .font-bn { font-family: var(--app-font-sans); }
+  .font-bn-display { font-family: var(--app-font-serif); }
+
+  .dhaka-title-gradient {
+    background: linear-gradient(90deg, var(--brand-saffron), var(--brand-gold), var(--brand-saffron));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Primary saffron CTA — the "yes, do it" button across the app */
+  .dhaka-btn-primary {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: 1rem;
+    color: white;
+    font-weight: 700;
+    font-family: var(--app-font-sans);
+    background: linear-gradient(135deg, var(--brand-saffron) 0%, var(--brand-amber) 100%);
+    box-shadow: var(--elev-md), inset 0 1px 0 rgba(255,255,255,0.18);
+    transition: transform 120ms ease, box-shadow 200ms ease, filter 200ms ease;
+  }
+  .dhaka-btn-primary:hover { filter: brightness(1.05); box-shadow: var(--elev-lg), var(--glow-saffron); }
+  .dhaka-btn-primary:active { transform: scale(0.96); }
+  .dhaka-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.4); }
+
+  /* Secondary "outline-on-dark" button — used on dark backdrops */
+  .dhaka-btn-secondary {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.20);
+    color: var(--brand-gold);
+    font-weight: 700;
+    font-family: var(--app-font-sans);
+    transition: transform 120ms ease, background 200ms ease, border-color 200ms ease;
+  }
+  .dhaka-btn-secondary:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,215,0,0.4); }
+  .dhaka-btn-secondary:active { transform: scale(0.96); }
+  .dhaka-btn-secondary:disabled { opacity: 0.40; cursor: not-allowed; color: #888; }
+
+  /* Ghost/tertiary button — quiet actions like Tutorial, Album */
+  .dhaka-btn-ghost {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border-radius: 1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--brand-tea);
+    font-weight: 600;
+    font-family: var(--app-font-sans);
+    font-size: 0.875rem;
+    transition: transform 120ms ease, background 200ms ease;
+  }
+  .dhaka-btn-ghost:hover { background: rgba(255,255,255,0.10); }
+  .dhaka-btn-ghost:active { transform: scale(0.96); }
+
+  /* Subtle saffron-tinted ghost — used inside the cream Menu modal */
+  .dhaka-btn-ghost-warm {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    background: rgba(255,107,0,0.08);
+    border: 1px solid rgba(255,107,0,0.18);
+    color: var(--brand-saffron);
+    font-weight: 600;
+    font-family: var(--app-font-sans);
+    transition: transform 120ms ease, background 200ms ease;
+  }
+  .dhaka-btn-ghost-warm:hover { background: rgba(255,107,0,0.14); }
+  .dhaka-btn-ghost-warm:active { transform: scale(0.96); }
+
+  /* Danger button — destructive actions (new game from menu) */
+  .dhaka-btn-danger {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    background: rgba(220,38,38,0.10);
+    border: 1px solid rgba(220,38,38,0.25);
+    color: #dc2626;
+    font-weight: 600;
+    font-family: var(--app-font-sans);
+    transition: transform 120ms ease, background 200ms ease;
+  }
+  .dhaka-btn-danger:hover { background: rgba(220,38,38,0.16); }
+  .dhaka-btn-danger:active { transform: scale(0.96); }
+
+  /* Cream warm card — Decision cards, Menu modal */
+  .dhaka-card-warm {
+    background: linear-gradient(135deg, var(--brand-cream) 0%, var(--brand-cream-2) 100%);
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 1rem;
+    box-shadow: var(--elev-md);
+  }
+
+  /* Translucent dark card — used on dark scene backdrops */
+  .dhaka-card-dark {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 1rem;
+    box-shadow: var(--elev-sm);
+  }
+
+  /* Saffron header strip — sits at the top of cream cards/modals */
+  .dhaka-header-saffron {
+    background: linear-gradient(90deg, var(--brand-saffron) 0%, var(--brand-amber) 100%);
+    color: white;
+  }
+
+  /* Modal backdrop — used by Menu and other overlays */
+  .dhaka-modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(10,6,0,0.78);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 50;
+  }
+
+  /* Toggle pill (used inside Menu for ON/OFF settings) */
+  .dhaka-toggle-pill {
+    border-radius: 9999px;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: white;
+  }
+  .dhaka-toggle-pill[data-on="true"]  { background: var(--brand-leaf); }
+  .dhaka-toggle-pill[data-on="false"] { background: #6b7280; }
+}

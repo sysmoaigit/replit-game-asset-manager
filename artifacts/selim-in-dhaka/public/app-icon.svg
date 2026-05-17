@@ -1,0 +1,25 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF6B00"/>
+      <stop offset="55%" stop-color="#FF8F00"/>
+      <stop offset="100%" stop-color="#CC3300"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.35" r="0.7">
+      <stop offset="0%" stop-color="#FFD700" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#FFD700" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="textGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFF8EE"/>
+      <stop offset="100%" stop-color="#FFD700"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#glow)"/>
+  <g font-family="Georgia, 'Tiro Bangla', serif" font-weight="700" text-anchor="middle">
+    <text x="256" y="320" font-size="280" fill="url(#textGrad)" stroke="#7a2200" stroke-width="6" paint-order="stroke">S</text>
+    <text x="256" y="420" font-size="56" fill="#FFF8EE" letter-spacing="6">DHAKA</text>
+  </g>
+  <circle cx="420" cy="110" r="32" fill="#FF69B4" opacity="0.85"/>
+  <text x="420" y="125" font-size="42" text-anchor="middle" fill="#FFF8EE" font-family="Arial, sans-serif">♥</text>
+</svg>
