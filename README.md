@@ -2,6 +2,8 @@
 
 Exported from Replit. Original project: [Game Asset Manager](https://replit.com/@aipremiumshop02/Game-Asset-Manager)
 
+> ⚠️ **Replit project deleted** — This GitHub repo is now the canonical source of truth.
+
 ## What it is
 
 A pnpm workspace monorepo containing:
@@ -45,10 +47,50 @@ pnpm --filter @workspace/selim-in-dhaka run dev
 - `PORT`
 - `NODE_ENV`
 
-## Deploy steps
+## Auto-Deploy (CI/CD)
 
-- **Static game (selim-in-dhaka)**: Build with `pnpm --filter @workspace/selim-in-dhaka run build`, deploy `dist/public` to Cloudflare Pages.
-- **API server**: Requires PostgreSQL. Can be deployed to Cloudflare Workers (Hono port) or any Node.js host with DB access.
+**Push to `main` → GitHub Actions builds → deploys to Cloudflare Pages automatically.**
+
+| Workflow | Trigger | Deploy Target |
+|----------|---------|---------------|
+| `deploy-selim-in-dhaka.yml` | Push to `artifacts/selim-in-dhaka/**`, `lib/**`, `package.json` | https://selim-in-dhaka.pages.dev |
+| `deploy-mockup-sandbox.yml` | Push to `artifacts/mockup-sandbox/**`, `lib/**`, `package.json` | https://mockup-sandbox.pages.dev |
+
+**Manual trigger**: Go to GitHub → Actions → select workflow → "Run workflow"
+
+**Build env vars** (set in GitHub Actions):
+- `PORT=3000`
+- `BASE_PATH=/`
+- `NODE_ENV=production`
+
+### Required GitHub Secret
+
+- `CLOUDFLARE_API_TOKEN` — stored in repo Settings → Secrets and variables → Actions
+
+## Manual Deploy (fallback)
+
+```bash
+# Build game
+PORT=3000 BASE_PATH=/ pnpm --filter @workspace/selim-in-dhaka run build
+
+# Deploy game
+npx wrangler pages deploy artifacts/selim-in-dhaka/dist/public --project-name=selim-in-dhaka
+
+# Build mockup
+PORT=3000 BASE_PATH=/ pnpm --filter @workspace/mockup-sandbox run build
+
+# Deploy mockup
+npx wrangler pages deploy artifacts/mockup-sandbox/dist --project-name=mockup-sandbox
+```
+
+## API Server Deploy
+
+**Status**: Not yet deployed. Requires PostgreSQL database.
+
+Options:
+1. **Supabase** free tier — migrate Drizzle ORM to Supabase connection string
+2. **Cloudflare D1** — use `drizzle-orm/d1` adapter
+3. **Neon/Render** free tier — standard Postgres host
 
 ## Rollback
 
