@@ -1,0 +1,23 @@
+# Gitleaks config for replit-game-asset-manager
+# These are false positives — localStorage keys in the game code
+
+[extend]
+# Use default rules as base
+
+[allowlist]
+paths = [
+    # Game localStorage key files — these contain key NAMES, not secrets
+    '''artifacts/selim-in-dhaka/src/game/storyProgress.ts''',
+    '''artifacts/selim-in-dhaka/src/game/easterEggs.ts''',
+    '''artifacts/selim-in-dhaka/src/lib/hintRegistry.ts''',
+    '''artifacts/selim-in-dhaka/src/lib/endingHistory.ts''',
+    '''artifacts/selim-in-dhaka/src/lib/selimVoice.ts''',
+    '''artifacts/selim-in-dhaka/src/components/SelimAlbum.tsx''',
+]
+
+# Also allowlist the specific localStorage key patterns
+regexes = [
+    '''selim_dhaka_[a-z_]+_v\d+''',
+    '''selim_[a-z_]+_v\d+''',
+    '''selim_hints_suppressed_v\d+''',
+]
