@@ -1,0 +1,45 @@
+name: Deploy mockup-sandbox
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'artifacts/mockup-sandbox/**'
+      - 'lib/**'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build mockup-sandbox
+        run: pnpm --filter @workspace/mockup-sandbox run build
+        env:
+          PORT: 3000
+          BASE_PATH: /
+          NODE_ENV: production
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 4ca6269edabb6ad2906d70ec6845de22
+          command: pages deploy artifacts/mockup-sandbox/dist --project-name=mockup-sandbox --branch=main
